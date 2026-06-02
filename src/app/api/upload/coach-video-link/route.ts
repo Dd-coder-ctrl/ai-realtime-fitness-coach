@@ -21,7 +21,10 @@ async function ytdlpAvailable(): Promise<boolean> {
 async function getVideoInfo(url: string): Promise<{ duration: number; title: string }> {
   return new Promise((resolve, reject) => {
     const proc = spawn('yt-dlp', [
-      '--no-playlist', '--dump-json', '--no-warnings', url,
+      '--no-playlist', '--dump-json', '--no-warnings',
+      '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      '--add-header', 'Referer:https://www.bilibili.com',
+      url,
     ]);
     let stdout = '';
     proc.stdout.on('data', (d: Buffer) => { stdout += d.toString(); });
@@ -44,6 +47,8 @@ async function downloadVideo(url: string, outputPath: string): Promise<void> {
       '-f', 'bestvideo[height<=720]+bestaudio/best[height<=720]/best',
       '--merge-output-format', 'mp4',
       '--no-warnings',
+      '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      '--add-header', 'Referer:https://www.bilibili.com',
       '-o', outputPath,
       url,
     ]);
